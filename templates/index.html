@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Alocação de Memória</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <!-- SweetAlert -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body style="width: 100%;display: flex;flex-direction: column;justify-content: center;align-items: center;height: 100%;position: absolute;">
+    <h1>Alocação de Memória</h1>
+    <form method="POST" class="w-25 p-3" >
+
+        <div class="form-row align-items-center">
+            <label for="floatingSelect">Selecione a opção desejada</label>
+            <select class="custom-select mr-sm-2" name="opcao" id="opcao" aria-label="Floating label select example">
+              <option value="0">Abra e selecione a opção</option>
+              <option value="1">Alocar processo</option>
+              <option value="2">Remover processo</option>
+              <option value="3">Reorganizar memória</option>
+              <option value="4">Salvar memoria em Json</option>
+            </select>
+            
+        </div>
+
+        <br>
+        
+        <label for="tamanho_processo">Tamanho do processo:</label>
+        <input class="form-control" type="number" name="tamanho_processo" id="tamanho_processo">
+        <br>
+        <label for="nome_processo" >Nome do processo:</label>
+        <input class="form-control" type="text" name="nome_processo" maxlength="1" id="nome_processo">
+        <input class="w-100 btn btn-dark mt-4" type="submit" value="Enviar">
+    </form>
+    {% if memoria %}
+    <h4>Estado atual da memória:</h4>
+    <table border="1" class="w-75 table-dark" >
+        <tr>
+            {% for i in range(50) %}
+            <th style="text-align: center">{{ i }}</th>
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for i in memoria %}
+            {% if i == "" %}
+            <td bgcolor="#FFFFFF"></td>
+            {% else %}
+            <td bgcolor="#dadada" style="color: #343a40">{{ i }}</td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+    </table>
+    {% endif %}
+    {% with messages = get_flashed_messages() %}  
+    {% if messages %}  
+          {% for message in messages %}  
+
+               <script>
+                let msg = "{{message}}"
+
+                if (msg == "Processo alocado com sucesso!"){
+                    Swal.fire({
+                                icon: 'success',
+                                title: "Status do processo",
+                                text:  msg
+                        });
+                }else if (msg == "Não há espaço suficiente para alocar a informação. Aloque uma quantidade menor ou apague um processo existente."){
+                    Swal.fire({
+                                icon: 'error',
+                                title: "Overflow",
+                                text:  msg
+                        });
+                }else if (msg == "ERRO! Esse processo não existe no bloco."){
+                    Swal.fire({
+                                icon: 'error',
+                                title: "Erro!",
+                                text:  msg
+                        });
+                }else if (msg == "Processo removido com sucesso!"){
+                    Swal.fire({
+                                icon: 'success',
+                                title: "Status do processo",
+                                text:  msg
+                        });
+                }else if (msg == "Memória reorganizada com sucesso!"){
+                    Swal.fire({
+                                icon: 'success',
+                                title: "Status do processo",
+                                text:  msg
+                        });
+                }else if (msg == "Log salvo com sucesso!"){
+                    Swal.fire({
+                                icon: 'success',
+                                title: "Status do processo",
+                                text:  msg
+                        });
+                }else if (msg == "0"){
+                    Swal.fire({
+                                icon: 'warning',
+                                title: "Status do processo",
+                                text:  "Selecione algum dos campos"
+                        });
+                }else if (msg == "1"){
+                    Swal.fire({
+                                icon: 'warning',
+                                title: "Status do processo",
+                                text:  "Verifique se todos os campos foram preenchidos"
+                        });
+                }else if (msg == "2"){
+                    Swal.fire({
+                                icon: 'warning',
+                                title: "Memoria Lotada",
+                                text:  "Retire um dos processos para que a memoria seja reorganizada!"
+                        });
+                }
+
+               </script>
+          {% endfor %}  
+    {% endif %}  
+    {% endwith %}
+
+ <script>
+    let tamanho = document.querySelector("#tamanho_processo")
+    let nome = document.querySelector("#nome_processo")
+    let opcao = document.querySelector("#opcao")
+
+    opcao.addEventListener("change",function(){
+        if (opcao.value == 2){
+            tamanho.setAttribute("disabled", "disabled");
+        }
+        else if (opcao.value == 3){
+            nome.setAttribute("disabled", "disabled");
+            tamanho.setAttribute("disabled", "disabled");
+        }
+        else if (opcao.value == 4){
+            nome.setAttribute("disabled", "disabled");
+            tamanho.setAttribute("disabled", "disabled");
+        }
+        else{
+            nome.removeAttribute("disabled");
+            tamanho.removeAttribute("disabled");    
+        }
+    })
+ </script>
+
+
+</body>
+
+</html>
